@@ -515,7 +515,7 @@ html:has(.doc[open]){overflow:hidden}
 <!-- FIRST PAGE -->
 <section class="intro" id="top" data-intro>
   <div class="stage">
-    <img class="photo" src="img/puma.jpg" fetchpriority="high" alt="A puma watching from flowering shrubs, Patagonia" data-photo>
+    <picture><source media="(max-width: 760px) and (orientation: portrait)" srcset="img/puma-m.jpg"><img class="photo" src="img/puma.jpg" fetchpriority="high" alt="A puma watching from flowering shrubs, Patagonia" data-photo></picture>
     <canvas aria-hidden="true" data-cut></canvas>
     <div class="open" data-open>
       <p class="who">Matan Wild</p>
@@ -687,6 +687,7 @@ html:has(.doc[open]){overflow:hidden}
 <!-- FILM: on expedition, behind the scenes -->
 <section class="film" id="film" data-sec data-film aria-label="Expedition film, Ladakh">
   <video muted loop playsinline preload="none" data-poster="video/ladakh-poster.jpg" data-film-video aria-label="Behind the scenes on a photography expedition in Ladakh: the team with long lenses and spotting scopes, a redstart, and blue sheep on a ridge">
+    <source src="video/ladakh-m.mp4" type="video/mp4" media="(max-width: 760px) and (orientation: portrait)">
     <source src="video/ladakh.mp4" type="video/mp4">
   </video>
   <div class="film-over">
@@ -706,14 +707,14 @@ html:has(.doc[open]){overflow:hidden}
         <h2 class="word" data-split>Off the <b>map.</b></h2>
         <p class="line">Land, sky and sea. Wherever the story is.</p>
       </div>
-      <figure data-full="img/full/towers.jpg" data-cam="Sony α1|200mm|f/7.1|1/60 s|ISO 125"><button type="button" class="frame" data-view aria-label="View The Towers, Patagonia, full size"><img src="img/towers.jpg" alt="A guanaco below the granite towers" loading="lazy"></button><figcaption class="cap"><b>The Towers</b><span>Patagonia</span></figcaption></figure>
-      <figure data-full="img/full/penguins.jpg" data-date="December 2025" data-cam="Sony α1|FE 16-35mm F2.8 GM|27mm|f/11|1/400 s|ISO 250"><button type="button" class="frame" data-view aria-label="View The Procession, Far South, full size"><img src="img/penguins.jpg" alt="King penguins walking up a glacial river" loading="lazy"></button><figcaption class="cap"><b>The Procession</b><span>Far South</span></figcaption></figure>
-      <figure data-full="img/full/air-veins.jpg" data-cam="Sony α1|70mm|f/4|1/6400 s|ISO 2000|From a plane"><button type="button" class="frame" data-view aria-label="View Gold Veins, Iceland, full size"><img src="img/air-veins.jpg" alt="Golden veins on black sand from the air" loading="lazy"></button><figcaption class="cap"><b>Gold Veins</b><span>Iceland</span></figcaption></figure>
-      <figure data-full="img/full/fox.jpg" data-cam="Sony α1|600mm|f/4|1/1250 s|ISO 1000"><button type="button" class="frame" data-view aria-label="View Red Field, Patagonia, full size"><img src="img/fox.jpg" alt="A grey fox in a field of red grass" loading="lazy"></button><figcaption class="cap"><b>Red Field</b><span>Patagonia</span></figcaption></figure>
-      <figure data-full="img/full/pair.jpg" data-date="December 2025" data-cam="Sony α1|FE 600mm F4 GM OSS|600mm|f/7.1|1/800 s|ISO 800"><button type="button" class="frame" data-view aria-label="View Two, Far South, full size"><img src="img/pair.jpg" alt="Two king penguins, heads close together" loading="lazy"></button><figcaption class="cap"><b>Two</b><span>Far South</span></figcaption></figure>
-      <figure data-full="img/full/air-braided.jpg" data-cam="Sony α1|100mm|f/4.5|1/2000 s|ISO 800|From a plane"><button type="button" class="frame" data-view aria-label="View Braided, Iceland, full size"><img src="img/air-braided.jpg" alt="Turquoise braided channels across rust and black sand, from the air" loading="lazy"></button><figcaption class="cap"><b>Braided</b><span>Iceland</span></figcaption></figure>
-      <figure data-full="img/full/walker.jpg" data-date="July 2024" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|91mm|f/8|1/250 s|ISO 640"><button type="button" class="frame" data-view aria-label="View The Walker, Iceland, full size"><img src="img/walker.jpg" alt="A lone hiker on a ridge between steaming hills" loading="lazy"></button><figcaption class="cap"><b>The Walker</b><span>Iceland</span></figcaption></figure>
-      <figure data-full="img/full/serrated.jpg" data-date="November 2025" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|182mm|f/5.6|1/320 s|ISO 640"><button type="button" class="frame" data-view aria-label="View Serrated, Far South, full size"><img src="img/serrated.jpg" alt="Jagged snow-streaked peaks under a grey sky" loading="lazy"></button><figcaption class="cap"><b>Serrated</b><span>Far South</span></figcaption></figure>
+      <figure data-full="img/full/towers.jpg" data-cam="Sony α1|200mm|f/7.1|1/60 s|ISO 125"><button type="button" class="frame" data-view aria-label="View The Towers, Patagonia, full size"><img src="img/towers.jpg" srcset="img/towers-1000.jpg 1000w, img/towers.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="A guanaco below the granite towers" loading="lazy"></button><figcaption class="cap"><b>The Towers</b><span>Patagonia</span></figcaption></figure>
+      <figure data-full="img/full/penguins.jpg" data-date="December 2025" data-cam="Sony α1|FE 16-35mm F2.8 GM|27mm|f/11|1/400 s|ISO 250"><button type="button" class="frame" data-view aria-label="View The Procession, Far South, full size"><img src="img/penguins.jpg" srcset="img/penguins-1000.jpg 1000w, img/penguins.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="King penguins walking up a glacial river" loading="lazy"></button><figcaption class="cap"><b>The Procession</b><span>Far South</span></figcaption></figure>
+      <figure data-full="img/full/air-veins.jpg" data-cam="Sony α1|70mm|f/4|1/6400 s|ISO 2000|From a plane"><button type="button" class="frame" data-view aria-label="View Gold Veins, Iceland, full size"><img src="img/air-veins.jpg" srcset="img/air-veins-1000.jpg 1000w, img/air-veins.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="Golden veins on black sand from the air" loading="lazy"></button><figcaption class="cap"><b>Gold Veins</b><span>Iceland</span></figcaption></figure>
+      <figure data-full="img/full/fox.jpg" data-cam="Sony α1|600mm|f/4|1/1250 s|ISO 1000"><button type="button" class="frame" data-view aria-label="View Red Field, Patagonia, full size"><img src="img/fox.jpg" srcset="img/fox-1000.jpg 1000w, img/fox.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="A grey fox in a field of red grass" loading="lazy"></button><figcaption class="cap"><b>Red Field</b><span>Patagonia</span></figcaption></figure>
+      <figure data-full="img/full/pair.jpg" data-date="December 2025" data-cam="Sony α1|FE 600mm F4 GM OSS|600mm|f/7.1|1/800 s|ISO 800"><button type="button" class="frame" data-view aria-label="View Two, Far South, full size"><img src="img/pair.jpg" srcset="img/pair-1000.jpg 1000w, img/pair.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="Two king penguins, heads close together" loading="lazy"></button><figcaption class="cap"><b>Two</b><span>Far South</span></figcaption></figure>
+      <figure data-full="img/full/air-braided.jpg" data-cam="Sony α1|100mm|f/4.5|1/2000 s|ISO 800|From a plane"><button type="button" class="frame" data-view aria-label="View Braided, Iceland, full size"><img src="img/air-braided.jpg" srcset="img/air-braided-1000.jpg 1000w, img/air-braided.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="Turquoise braided channels across rust and black sand, from the air" loading="lazy"></button><figcaption class="cap"><b>Braided</b><span>Iceland</span></figcaption></figure>
+      <figure data-full="img/full/walker.jpg" data-date="July 2024" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|91mm|f/8|1/250 s|ISO 640"><button type="button" class="frame" data-view aria-label="View The Walker, Iceland, full size"><img src="img/walker.jpg" srcset="img/walker-1000.jpg 1000w, img/walker.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="A lone hiker on a ridge between steaming hills" loading="lazy"></button><figcaption class="cap"><b>The Walker</b><span>Iceland</span></figcaption></figure>
+      <figure data-full="img/full/serrated.jpg" data-date="November 2025" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|182mm|f/5.6|1/320 s|ISO 640"><button type="button" class="frame" data-view aria-label="View Serrated, Far South, full size"><img src="img/serrated.jpg" srcset="img/serrated-1000.jpg 1000w, img/serrated.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="Jagged snow-streaked peaks under a grey sky" loading="lazy"></button><figcaption class="cap"><b>Serrated</b><span>Far South</span></figcaption></figure>
     </div>
     <div class="bar" aria-hidden="true"><i data-bar></i></div>
   </div>
@@ -1089,7 +1090,11 @@ window.MWP_BOOT = () => {
   const filmView = () => {
     const r = film.getBoundingClientRect(), near = r.top < innerHeight * 1.6 && r.bottom > -innerHeight * .6, seen = r.top < innerHeight && r.bottom > 0;
     if (near && !fv.getAttribute('poster') && fv.dataset.poster) fv.poster = fv.dataset.poster; // the poster too waits until the film is near
-    if (near && !userPaused && fv.preload === 'none') { fv.preload = 'auto'; fv.load(); }
+    if (near && !userPaused && fv.preload === 'none') {
+      // the lighter portrait film is for phones held upright; every other screen gets the full one
+      const ms = fv.querySelector('source[media]'); if (ms && !matchMedia(ms.media).matches) ms.remove();
+      fv.preload = 'auto'; fv.load();
+    }
     if (seen && !userPaused && fv.paused) fv.play().catch(() => {});
     else if ((!seen || userPaused) && !fv.paused) fv.pause();
   };

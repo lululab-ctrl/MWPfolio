@@ -547,7 +547,7 @@ html:has(.doc[open]){overflow:hidden}
 <!-- FIRST PAGE -->
 <section class="intro" id="top" data-intro>
   <div class="stage">
-    <img class="photo" src="img/puma.jpg" fetchpriority="high" alt="פומה מציצה מבין שיחים פורחים, פטגוניה" data-photo>
+    <picture><source media="(max-width: 760px) and (orientation: portrait)" srcset="img/puma-m.jpg"><img class="photo" src="img/puma.jpg" fetchpriority="high" alt="פומה מציצה מבין שיחים פורחים, פטגוניה" data-photo></picture>
     <canvas aria-hidden="true" data-cut></canvas>
     <div class="open" data-open>
       <p class="who">Matan Wild</p>
@@ -719,6 +719,7 @@ html:has(.doc[open]){overflow:hidden}
 <!-- FILM: on expedition, behind the scenes -->
 <section class="film" id="film" data-sec data-film aria-label="סרט מהמסע בלדאק">
   <video muted loop playsinline preload="none" data-poster="video/ladakh-poster.jpg" data-film-video aria-label="מאחורי הקלעים של מסע צילום בלדאק: הצוות עם עדשות ארוכות וטלסקופים, חכלילית, וכבשי בהרל על רכס">
+    <source src="video/ladakh-m.mp4" type="video/mp4" media="(max-width: 760px) and (orientation: portrait)">
     <source src="video/ladakh.mp4" type="video/mp4">
   </video>
   <div class="film-over">
@@ -738,14 +739,14 @@ html:has(.doc[open]){overflow:hidden}
         <h2 class="word" data-split>מחוץ <b>למפה.</b></h2>
         <p class="line">יבשה, אוויר וים. לאן שהסיפור לוקח אותנו.</p>
       </div>
-      <figure data-full="img/full/towers.jpg" data-cam="Sony α1|200mm|f/7.1|1/60 s|ISO 125"><button type="button" class="frame" data-view aria-label="המגדלים, פטגוניה. לצפייה במסך מלא"><img src="img/towers.jpg" alt="גואנקו למרגלות מגדלי הגרניט" loading="lazy"></button><figcaption class="cap"><b>המגדלים</b><span>פטגוניה</span></figcaption></figure>
-      <figure data-full="img/full/penguins.jpg" data-date="דצמבר 2025" data-cam="Sony α1|FE 16-35mm F2.8 GM|27mm|f/11|1/400 s|ISO 250"><button type="button" class="frame" data-view aria-label="התהלוכה, הדרום הרחוק. לצפייה במסך מלא"><img src="img/penguins.jpg" alt="פינגווינים מלכותיים צועדים במעלה נהר קרחוני" loading="lazy"></button><figcaption class="cap"><b>התהלוכה</b><span>הדרום הרחוק</span></figcaption></figure>
-      <figure data-full="img/full/air-veins.jpg" data-cam="Sony α1|70mm|f/4|1/6400 s|ISO 2000|ממטוס"><button type="button" class="frame" data-view aria-label="עורקי זהב, איסלנד. לצפייה במסך מלא"><img src="img/air-veins.jpg" alt="עורקים זהובים על חול שחור, ממבט אוויר" loading="lazy"></button><figcaption class="cap"><b>עורקי זהב</b><span>איסלנד</span></figcaption></figure>
-      <figure data-full="img/full/fox.jpg" data-cam="Sony α1|600mm|f/4|1/1250 s|ISO 1000"><button type="button" class="frame" data-view aria-label="השדה האדום, פטגוניה. לצפייה במסך מלא"><img src="img/fox.jpg" alt="שועל אפור בשדה של עשב אדום" loading="lazy"></button><figcaption class="cap"><b>השדה האדום</b><span>פטגוניה</span></figcaption></figure>
-      <figure data-full="img/full/pair.jpg" data-date="דצמבר 2025" data-cam="Sony α1|FE 600mm F4 GM OSS|600mm|f/7.1|1/800 s|ISO 800"><button type="button" class="frame" data-view aria-label="שניים, הדרום הרחוק. לצפייה במסך מלא"><img src="img/pair.jpg" alt="שני פינגווינים מלכותיים, ראש אל ראש" loading="lazy"></button><figcaption class="cap"><b>שניים</b><span>הדרום הרחוק</span></figcaption></figure>
-      <figure data-full="img/full/air-braided.jpg" data-cam="Sony α1|100mm|f/4.5|1/2000 s|ISO 800|ממטוס"><button type="button" class="frame" data-view aria-label="קלועים, איסלנד. לצפייה במסך מלא"><img src="img/air-braided.jpg" alt="ערוצים קלועים בטורקיז על חול חלוד ושחור, ממבט אוויר" loading="lazy"></button><figcaption class="cap"><b>קלועים</b><span>איסלנד</span></figcaption></figure>
-      <figure data-full="img/full/walker.jpg" data-date="יולי 2024" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|91mm|f/8|1/250 s|ISO 640"><button type="button" class="frame" data-view aria-label="הולכת, איסלנד. לצפייה במסך מלא"><img src="img/walker.jpg" alt="מטיילת בודדת על רכס בין גבעות מעלות אדים" loading="lazy"></button><figcaption class="cap"><b>הולכת</b><span>איסלנד</span></figcaption></figure>
-      <figure data-full="img/full/serrated.jpg" data-date="נובמבר 2025" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|182mm|f/5.6|1/320 s|ISO 640"><button type="button" class="frame" data-view aria-label="שנון, הדרום הרחוק. לצפייה במסך מלא"><img src="img/serrated.jpg" alt="פסגות משוננות עם פסי שלג תחת שמיים אפורים" loading="lazy"></button><figcaption class="cap"><b>שנון</b><span>הדרום הרחוק</span></figcaption></figure>
+      <figure data-full="img/full/towers.jpg" data-cam="Sony α1|200mm|f/7.1|1/60 s|ISO 125"><button type="button" class="frame" data-view aria-label="המגדלים, פטגוניה. לצפייה במסך מלא"><img src="img/towers.jpg" srcset="img/towers-1000.jpg 1000w, img/towers.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="גואנקו למרגלות מגדלי הגרניט" loading="lazy"></button><figcaption class="cap"><b>המגדלים</b><span>פטגוניה</span></figcaption></figure>
+      <figure data-full="img/full/penguins.jpg" data-date="דצמבר 2025" data-cam="Sony α1|FE 16-35mm F2.8 GM|27mm|f/11|1/400 s|ISO 250"><button type="button" class="frame" data-view aria-label="התהלוכה, הדרום הרחוק. לצפייה במסך מלא"><img src="img/penguins.jpg" srcset="img/penguins-1000.jpg 1000w, img/penguins.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="פינגווינים מלכותיים צועדים במעלה נהר קרחוני" loading="lazy"></button><figcaption class="cap"><b>התהלוכה</b><span>הדרום הרחוק</span></figcaption></figure>
+      <figure data-full="img/full/air-veins.jpg" data-cam="Sony α1|70mm|f/4|1/6400 s|ISO 2000|ממטוס"><button type="button" class="frame" data-view aria-label="עורקי זהב, איסלנד. לצפייה במסך מלא"><img src="img/air-veins.jpg" srcset="img/air-veins-1000.jpg 1000w, img/air-veins.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="עורקים זהובים על חול שחור, ממבט אוויר" loading="lazy"></button><figcaption class="cap"><b>עורקי זהב</b><span>איסלנד</span></figcaption></figure>
+      <figure data-full="img/full/fox.jpg" data-cam="Sony α1|600mm|f/4|1/1250 s|ISO 1000"><button type="button" class="frame" data-view aria-label="השדה האדום, פטגוניה. לצפייה במסך מלא"><img src="img/fox.jpg" srcset="img/fox-1000.jpg 1000w, img/fox.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="שועל אפור בשדה של עשב אדום" loading="lazy"></button><figcaption class="cap"><b>השדה האדום</b><span>פטגוניה</span></figcaption></figure>
+      <figure data-full="img/full/pair.jpg" data-date="דצמבר 2025" data-cam="Sony α1|FE 600mm F4 GM OSS|600mm|f/7.1|1/800 s|ISO 800"><button type="button" class="frame" data-view aria-label="שניים, הדרום הרחוק. לצפייה במסך מלא"><img src="img/pair.jpg" srcset="img/pair-1000.jpg 1000w, img/pair.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="שני פינגווינים מלכותיים, ראש אל ראש" loading="lazy"></button><figcaption class="cap"><b>שניים</b><span>הדרום הרחוק</span></figcaption></figure>
+      <figure data-full="img/full/air-braided.jpg" data-cam="Sony α1|100mm|f/4.5|1/2000 s|ISO 800|ממטוס"><button type="button" class="frame" data-view aria-label="קלועים, איסלנד. לצפייה במסך מלא"><img src="img/air-braided.jpg" srcset="img/air-braided-1000.jpg 1000w, img/air-braided.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="ערוצים קלועים בטורקיז על חול חלוד ושחור, ממבט אוויר" loading="lazy"></button><figcaption class="cap"><b>קלועים</b><span>איסלנד</span></figcaption></figure>
+      <figure data-full="img/full/walker.jpg" data-date="יולי 2024" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|91mm|f/8|1/250 s|ISO 640"><button type="button" class="frame" data-view aria-label="הולכת, איסלנד. לצפייה במסך מלא"><img src="img/walker.jpg" srcset="img/walker-1000.jpg 1000w, img/walker.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="מטיילת בודדת על רכס בין גבעות מעלות אדים" loading="lazy"></button><figcaption class="cap"><b>הולכת</b><span>איסלנד</span></figcaption></figure>
+      <figure data-full="img/full/serrated.jpg" data-date="נובמבר 2025" data-cam="Sony α1|FE 70-200mm F2.8 GM OSS II|182mm|f/5.6|1/320 s|ISO 640"><button type="button" class="frame" data-view aria-label="שנון, הדרום הרחוק. לצפייה במסך מלא"><img src="img/serrated.jpg" srcset="img/serrated-1000.jpg 1000w, img/serrated.jpg 1600w" sizes="(max-width: 760px) 84vw, min(92vh, 1000px, 84vw)" alt="פסגות משוננות עם פסי שלג תחת שמיים אפורים" loading="lazy"></button><figcaption class="cap"><b>שנון</b><span>הדרום הרחוק</span></figcaption></figure>
     </div>
     <div class="bar" aria-hidden="true"><i data-bar></i></div>
   </div>
@@ -1121,7 +1122,11 @@ window.MWP_BOOT = () => {
   const filmView = () => {
     const r = film.getBoundingClientRect(), near = r.top < innerHeight * 1.6 && r.bottom > -innerHeight * .6, seen = r.top < innerHeight && r.bottom > 0;
     if (near && !fv.getAttribute('poster') && fv.dataset.poster) fv.poster = fv.dataset.poster; // the poster too waits until the film is near
-    if (near && !userPaused && fv.preload === 'none') { fv.preload = 'auto'; fv.load(); }
+    if (near && !userPaused && fv.preload === 'none') {
+      // the lighter portrait film is for phones held upright; every other screen gets the full one
+      const ms = fv.querySelector('source[media]'); if (ms && !matchMedia(ms.media).matches) ms.remove();
+      fv.preload = 'auto'; fv.load();
+    }
     if (seen && !userPaused && fv.paused) fv.play().catch(() => {});
     else if ((!seen || userPaused) && !fv.paused) fv.pause();
   };

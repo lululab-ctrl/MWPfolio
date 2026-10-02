@@ -944,6 +944,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2F80FF;outline-offset
       el.load();
     } else {
       el.setAttribute('src', url); el.removeAttribute('srcset'); el.removeAttribute('sizes');
+      if (el.parentElement && el.parentElement.tagName === 'PICTURE') $$('source', el.parentElement).forEach(s => s.remove()); // the phone version would otherwise still show
       const fig = el.closest('figure[data-full]'); if (fig) fig.dataset.full = url;
     }
     select(el); commit(isVideo ? 'Replace video' : 'Replace image');

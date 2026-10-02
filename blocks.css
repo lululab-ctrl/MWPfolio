@@ -85,3 +85,29 @@ img.blk-ic{object-fit:contain}
 .lines .copy-btn:hover{border-color:rgba(244,244,244,.5);color:var(--off)}
 .lines .copy-btn.ok{border-color:var(--goldsoft);color:var(--goldsoft)}
 @media (max-width:420px){.lines li{gap:8px}.line-link{gap:12px}.line-ic{width:40px;height:40px}.line-ic svg{width:18px;height:18px}.line-txt{font-size:clamp(13px,3.7vw,16px);overflow-wrap:normal;white-space:nowrap}}
+
+/* ---------- phones ---------- */
+@media (max-width:760px){
+  /* the top bar gets a soft dark backdrop once it appears, so it never sits on top of text */
+  #site::before{content:"";position:fixed;z-index:39;inset:0 0 auto;height:calc(78px + env(safe-area-inset-top,0px));background:linear-gradient(180deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,.72) 55%,rgba(10,9,8,0) 100%);pointer-events:none;opacity:0;transition:opacity .6s}
+  #site:has(.mark.on)::before{opacity:1}
+  #site .mark,#site .corner{mix-blend-mode:normal}
+  #site .corner{gap:10px}
+  #site .talk{--tr:.16em;min-height:36px;padding-inline:calc(14px + var(--tr)) 14px;font-size:10px}
+  /* a shorter fly-through on the first page, so the content arrives sooner */
+  #site .intro{height:250vh}
+  /* comfortable finger-sized targets */
+  #site .mq-toggle,#site .film-toggle{min-height:40px}
+  #site .lines .copy-btn{width:40px;height:40px}
+  #site .go{padding-block:14px;margin-top:16px}
+  #site .follow a{display:inline-block;padding-block:10px 6px}
+  #site .foot nav a{display:inline-block;padding-block:12px}
+  #site .legal button{padding-block:12px}
+  #site .legal nav{gap:0 24px}
+  #site .quick button{min-height:40px}
+  /* section openings breathe a little less on a small screen */
+  #site .partner,#site .cols,#site .outro,#site .tell,#site .blk{padding-block:clamp(72px,11vh,110px) clamp(56px,8vh,90px)}
+  #site .roles-line{gap:8px 18px;letter-spacing:.14em}
+  /* the Tell photo's credit moves to the bottom corner, clear of the headline */
+  #site .tell .credit{top:auto;bottom:16px;padding-block:0}
+}
