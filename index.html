@@ -22,7 +22,8 @@
 {"@type":"Person","@id":"https://matanwildphotography.com/#matan","name":"Matan Wild","jobTitle":"Wildlife and landscape photographer, photography educator","email":"mailto:matan@matanwildphotography.com","telephone":"+972537432878","url":"https://matanwildphotography.com/","worksFor":{"@id":"https://mw-phototours.com/#org"},"sameAs":["https://mw-phototours.com","https://www.instagram.com/mw_phototours","https://www.facebook.com/people/MW-Photo-Tours/61580936126537/"]},
 {"@type":"Organization","@id":"https://mw-phototours.com/#org","name":"MW Photo Tours","url":"https://mw-phototours.com"},
 {"@type":"Periodical","name":"The Wild Side of Photography","inLanguage":["he","en"],"creator":{"@id":"https://matanwildphotography.com/#matan"}}]}</script>
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js','mwp-wait')</script>
+<link rel="stylesheet" href="blocks.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@200..800&family=Google+Sans:wght@400..700&display=swap">
@@ -505,6 +506,7 @@ html:has(.doc[open]){overflow:hidden}
 <style>[hidden]{display:none!important}</style>
 </head>
 <body>
+<div id="site">
 <a class="skip" href="#reach">Skip to contact</a>
 <a class="mark" href="#top" aria-label="MWP, back to the start">MWP</a>
 <div class="corner"><a class="lang" href="he.html" lang="he" hreflang="he">עברית</a><a class="talk" href="#reach">Work with us</a></div>
@@ -618,7 +620,7 @@ html:has(.doc[open]){overflow:hidden}
     </article>
     <div class="sheet-cta">
       <button type="button" class="send" data-sheet-go>Start a conversation</button>
-      <a class="wa" href="https://wa.me/972537432878" target="_blank" rel="noopener" data-sheet-wa><span>WhatsApp</span>Message Matan</a>
+      <a class="wa-btn" aria-label="Message Matan on WhatsApp" href="https://wa.me/972537432878" target="_blank" rel="noopener" data-sheet-wa><svg class="wa-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="wa-ring" d="M3.6 20.4l1.25-4.4A8.6 8.6 0 1 1 8.1 19.3z"/><path class="wa-phone" d="M9.1 7.9c.25-.5.55-.55.85-.55h.5c.2 0 .42.1.52.36l.68 1.62c.08.2.04.43-.1.6l-.55.66a.4.4 0 0 0-.04.47 7.1 7.1 0 0 0 2.6 2.55c.17.1.38.07.5-.06l.6-.62c.16-.17.4-.21.6-.12l1.62.74c.24.11.38.33.38.58v.42c0 .36-.16.7-.58.93-.66.36-1.75.55-3.2-.07-1.62-.68-3.2-2.25-3.9-3.9-.58-1.4-.4-2.42-.08-3.08z"/></svg><span>WhatsApp</span></a>
     </div>
   </div>
 </dialog>
@@ -816,7 +818,7 @@ html:has(.doc[open]){overflow:hidden}
   </ul>
   <div class="reach">
     <div style="display:grid;gap:22px;align-content:start">
-      <div class="mail"><a href="mailto:matan@matanwildphotography.com" data-mail>matan@matanwildphotography.com</a><button type="button" data-copy>Copy</button><span class="sr" aria-live="polite" data-copy-note></span></div>
+      <div class="mail"><a href="mailto:matan@matanwildphotography.com" data-mail>matan@matanwildphotography.com</a><button type="button" class="copy-btn" data-copy aria-label="Copy email address" title="Copy email address"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></svg></button><span class="sr" aria-live="polite" data-copy-note></span></div>
       <a class="wa" href="https://wa.me/972537432878" target="_blank" rel="noopener" data-wa><span>WhatsApp</span>+972 53-743-2878</a>
     </div>
     <form class="form" data-form>
@@ -929,10 +931,41 @@ html:has(.doc[open]){overflow:hidden}
   </div>
 </dialog>
 
+</div><!-- /site -->
+
 <script src="config.js"></script>
 <script>
-(() => {
-  const $ = (s, r = document) => r.querySelector(s);
+// texts the contact form shows for each topic (Edit Mode can change them per page)
+window.MWP_FORM_DEFAULTS = {
+  asks: {
+    'Brand partnership': 'Your brand, the goal and the timing.',
+    'Commissioned work': 'What you need, where and when.',
+    'Image licensing': 'Which image, how it will be used, where and for how long.',
+    'Team expedition': 'Group size, dates and the kind of place you have in mind.',
+    'Lectures and mentoring': 'For a talk: the audience, the date and the place. For mentoring: where you are now and where you want to go.',
+    'Collect': 'Which work, and the wall it is for.',
+    'Something else': 'Tell us a little about it.'
+  },
+  about: {
+    'Brand partnership': 'a brand partnership', 'Commissioned work': 'commissioned work', 'Image licensing': 'licensing an image',
+    'Team expedition': 'a team expedition', 'Lectures and mentoring': 'a lecture or mentoring', 'Collect': 'collecting a print', 'Something else': 'working together'
+  },
+  starts: {
+    'Brand partnership': ['We’re launching a product and want it shot in the field.', 'We’re looking for an ambassador for our brand.', 'We’d like to feature our brand in The Wild Side of Photography.'],
+    'Commissioned work': ['We need photography and film from a specific location.', 'We need aerial work for a project.', 'Can we talk about dates for a shoot?'],
+    'Image licensing': ['We’d like to license an image from the portfolio.', 'We’re looking for images of a specific subject or place.', 'We need an image for packaging or print.'],
+    'Team expedition': ['We’d like a private expedition for our team.', 'We’re planning a trip for our clients.', 'Which destinations and dates are open next year?'],
+    'Lectures and mentoring': ['We’d like to book a talk for our team or event.', 'Our photography club would like a workshop.', 'I’m looking for mentoring as a photographer or creator.'],
+    'Collect': ['I’d like to see the limited editions.', 'I’m looking for a large print for a specific wall.', 'Could we arrange a fit check for my space?'],
+    'Something else': ['I have an idea for a collaboration.', 'I’d just like to say hello.']
+  }
+};
+</script>
+<script>
+window.MWP_BOOT = () => {
+  // a missing element (an admin may delete anything) becomes a hidden stand-in, so the rest still runs
+  const NIL = () => Object.assign(document.createElement('canvas'), {hidden: true});
+  const $ = (s, r) => r ? r.querySelector(s) : (document.querySelector(s) || NIL()); // inside a given element, a miss stays null
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -1055,7 +1088,7 @@ html:has(.doc[open]){overflow:hidden}
   const filmBtn = () => { ft.textContent = fv.paused ? T.playFilm : T.pauseFilm; };
   const filmView = () => {
     const r = film.getBoundingClientRect(), near = r.top < innerHeight * 1.6 && r.bottom > -innerHeight * .6, seen = r.top < innerHeight && r.bottom > 0;
-    if (near && !fv.getAttribute('poster')) fv.poster = fv.dataset.poster; // the poster too waits until the film is near
+    if (near && !fv.getAttribute('poster') && fv.dataset.poster) fv.poster = fv.dataset.poster; // the poster too waits until the film is near
     if (near && !userPaused && fv.preload === 'none') { fv.preload = 'auto'; fv.load(); }
     if (seen && !userPaused && fv.paused) fv.play().catch(() => {});
     else if ((!seen || userPaused) && !fv.paused) fv.pause();
@@ -1187,7 +1220,7 @@ html:has(.doc[open]){overflow:hidden}
   // ---------- logos: the wall rises tile by tile, the press strip loops (with a pause control) ----------
   $$('[data-wall] li').forEach((p, i) => { p.style.transitionDelay = (0.15 + i * 0.08).toFixed(2) + 's'; });
   const mq = $('[data-mq]');
-  [...mq.children].forEach(c => { const d = c.cloneNode(true); d.setAttribute('aria-hidden', 'true'); d.querySelector('img').alt = ''; mq.appendChild(d); });
+  [...mq.children].forEach(c => { const d = c.cloneNode(true); d.setAttribute('aria-hidden', 'true'); const im = d.querySelector('img'); if (im) im.alt = ''; mq.appendChild(d); });
   $('[data-mq-toggle]').addEventListener('click', e => {
     const b = e.currentTarget, on = b.dataset.paused !== '1';
     b.dataset.paused = on ? '1' : ''; b.textContent = on ? T.play : T.pause; // the label says what the button does next
@@ -1260,34 +1293,18 @@ html:has(.doc[open]){overflow:hidden}
 
   // ---------- contact ----------
   // each door asks for exactly what that kind of enquiry needs, and the email link carries the subject
+  const D = window.MWP_FORM_DEFAULTS || {};
+  const FT = (() => { try { return JSON.parse($('[data-form]').dataset.texts || '{}'); } catch (_) { return {}; } })();
   const sel = $('[data-door-select]'), msg = $('#f-msg'), mail = $('[data-mail]'), wa = $('[data-wa]');
-  const asks = {
-    'Brand partnership': 'Your brand, the goal and the timing.',
-    'Commissioned work': 'What you need, where and when.',
-    'Image licensing': 'Which image, how it will be used, where and for how long.',
-    'Team expedition': 'Group size, dates and the kind of place you have in mind.',
-    'Lectures and mentoring': 'For a talk: the audience, the date and the place. For mentoring: where you are now and where you want to go.',
-    'Collect': 'Which work, and the wall it is for.',
-    'Something else': 'Tell us a little about it.'
-  };
+  const asks = {...(D.asks || {}), ...(FT.asks || {})};
   // the WhatsApp message opens with a natural phrase for the chosen door
-  const about = {
-    'Brand partnership': 'a brand partnership', 'Commissioned work': 'commissioned work', 'Image licensing': 'licensing an image',
-    'Team expedition': 'a team expedition', 'Lectures and mentoring': 'a lecture or mentoring', 'Collect': 'collecting a print', 'Something else': 'working together'
-  };
+  const about = {...(D.about || {}), ...(FT.about || {})};
   // a door's visible name (its key stays the same in every language) and the WhatsApp opening for it
   const doorLabel = name => { const o = $$('option', sel).find(x => x.value === name); return o ? o.textContent : name; };
-  const waLink = name => `https://wa.me/972537432878?text=${encodeURIComponent(`${T.hello} ${about[name] || T.together}.`)}`;
+  const waNum = ((wa.getAttribute('href') || '').match(/wa\.me\/(\d+)/) || [])[1] || '972537432878';
+  const waLink = name => `https://wa.me/${waNum}?text=${encodeURIComponent(`${T.hello} ${about[name] || T.together}.`)}`;
   // ready-made openings for each door, in the visitor's voice; one tap fills the message, which stays fully editable
-  const starts = {
-    'Brand partnership': ['We’re launching a product and want it shot in the field.', 'We’re looking for an ambassador for our brand.', 'We’d like to feature our brand in The Wild Side of Photography.'],
-    'Commissioned work': ['We need photography and film from a specific location.', 'We need aerial work for a project.', 'Can we talk about dates for a shoot?'],
-    'Image licensing': ['We’d like to license an image from the portfolio.', 'We’re looking for images of a specific subject or place.', 'We need an image for packaging or print.'],
-    'Team expedition': ['We’d like a private expedition for our team.', 'We’re planning a trip for our clients.', 'Which destinations and dates are open next year?'],
-    'Lectures and mentoring': ['We’d like to book a talk for our team or event.', 'Our photography club would like a workshop.', 'I’m looking for mentoring as a photographer or creator.'],
-    'Collect': ['I’d like to see the limited editions.', 'I’m looking for a large print for a specific wall.', 'Could we arrange a fit check for my space?'],
-    'Something else': ['I have an idea for a collaboration.', 'I’d just like to say hello.']
-  };
+  const starts = {...(D.starts || {}), ...(FT.starts || {})};
   const quick = $('[data-quick]'); let lastQuick = '';
   const markQuick = () => $$('button', quick).forEach(b => b.setAttribute('aria-pressed', String(msg.value.trim() === b.textContent)));
   const renderQuick = name => {
@@ -1387,9 +1404,10 @@ html:has(.doc[open]){overflow:hidden}
   $('[data-copy]').addEventListener('click', e => {
     const t = $('[data-mail]').textContent, b = e.currentTarget;
     const note = $('[data-copy-note]'); // announced right beside the button
-    const done = () => { b.textContent = T.copied; note.textContent = T.copiedNote; setTimeout(() => { b.textContent = T.copy; note.textContent = ''; }, 1600); };
+    const icon = b.innerHTML, label = b.getAttribute('aria-label');
+    const done = () => { b.classList.add('ok'); b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>'; b.setAttribute('aria-label', T.copied); b.title = T.copied; note.textContent = T.copiedNote; setTimeout(() => { b.classList.remove('ok'); b.innerHTML = icon; b.setAttribute('aria-label', label); b.title = label; note.textContent = ''; }, 1600); };
     // if the browser blocks the clipboard, select the address and try the older copy command; failing that, say how
-    const fallback = () => { getSelection().selectAllChildren($('[data-mail]')); let ok = false; try { ok = document.execCommand('copy'); } catch (_) {} if (ok) done(); else { b.textContent = T.pressCopy; setTimeout(() => { b.textContent = T.copy; }, 2400); } };
+    const fallback = () => { getSelection().selectAllChildren($('[data-mail]')); let ok = false; try { ok = document.execCommand('copy'); } catch (_) {} if (ok) done(); else { b.title = T.pressCopy; note.textContent = T.pressCopy; setTimeout(() => { b.title = label; note.textContent = ''; }, 2400); } };
     if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
   });
   // ---------- contact form: each message is saved to the contact_messages table in Supabase (keys in config.js) ----------
@@ -1412,8 +1430,11 @@ html:has(.doc[open]){overflow:hidden}
     } catch (err) { console.error(err); formNote.textContent = T.failed; }
     finally { sendBtn.disabled = false; }
   });
-})();
+  // anything an editor placed outside the animated sections is simply shown
+  $$('.fade, [data-split]').forEach(el => { if (!el.closest('[data-sec]')) el.classList.add('in'); });
+};
 </script>
+<script src="mwp-loader.js"></script>
 
 </body>
 </html>

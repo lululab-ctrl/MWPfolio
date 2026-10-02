@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MWP · Admin</title>
+<style>
+:root{--night:#0A0908;--panel:#141210;--off:#F4F4F4;--muted:rgba(244,244,244,.68);--faint:rgba(244,244,244,.45);--rule:rgba(254,251,241,.12);--gold:#F4AF56;--blue:#2F80FF;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--night);color:var(--off);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.wrap{width:min(1080px,100%);margin:0 auto;padding:0 20px}
+header{display:flex;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--rule)}
+header .mark{font-weight:700;letter-spacing:.42em}
+header .who{margin-left:auto;color:var(--muted);font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;border:1px solid rgba(244,244,244,.25);border-radius:999px;background:none;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s}
+.btn:hover{border-color:rgba(244,244,244,.6);background:rgba(255,255,255,.04)}
+.btn.primary{background:var(--off);border-color:var(--off);color:var(--night)}
+.btn.primary:hover{background:#fff}
+.btn.small{min-height:32px;padding:0 12px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.login{display:grid;place-items:center;min-height:100vh;padding:20px}
+.card{width:min(420px,100%);padding:32px;border:1px solid var(--rule);border-radius:16px;background:var(--panel)}
+.card h1{margin:0 0 6px;font-size:26px;font-weight:600;letter-spacing:-.01em}
+.card p.sub{margin:0 0 24px;color:var(--muted)}
+.f{display:grid;gap:6px;margin-bottom:16px}
+.f span{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+input[type=text],input[type=password],input[type=email]{width:100%;height:46px;padding:0 14px;border:1px solid rgba(244,244,244,.2);border-radius:10px;background:rgba(255,255,255,.03)}
+input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.msg{min-height:1.4em;margin:12px 0 0;font-size:14px;color:var(--gold)}
+.msg.ok{color:#6fd39a}
+.linkish{border:0;background:none;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:14px}
+h2{margin:40px 0 14px;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.tile{display:grid;gap:6px;padding:22px;border:1px solid var(--rule);border-radius:14px;background:var(--panel);text-decoration:none;transition:border-color .2s,transform .2s}
+.tile:hover{border-color:rgba(244,175,86,.6);transform:translateY(-2px)}
+.tile b{font-size:19px;font-weight:600}
+.tile span{color:var(--muted);font-size:14px}
+.inbox-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.inbox-head h2{margin-right:auto}
+.filters{display:flex;gap:6px}
+.filters button{min-height:32px;padding:0 12px;border:1px solid var(--rule);border-radius:999px;background:none;color:var(--muted);cursor:pointer;font-size:13px}
+.filters button.on{border-color:var(--gold);color:var(--off);background:rgba(244,175,86,.1)}
+.msgs{display:grid;gap:10px}
+.m{padding:18px 20px;border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
+.m.new{border-color:rgba(244,175,86,.45)}
+.m-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.m-top b{font-size:16px}
+.m-top .meta{color:var(--faint);font-size:13px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px;color:var(--muted)}
+.pill.new{background:rgba(244,175,86,.18);color:var(--gold)}
+.m p{margin:10px 0 12px;white-space:pre-wrap;color:var(--muted)}
+.m-acts{display:flex;flex-wrap:wrap;gap:8px}
+.empty{padding:30px;text-align:center;color:var(--faint);border:1px dashed var(--rule);border-radius:14px}
+.pw{max-width:420px}
+footer{padding:50px 0 30px;color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- sign in -->
+<section class="login" data-view="login" hidden>
+  <form class="card" data-login>
+    <h1>MWP admin</h1>
+    <p class="sub">Sign in to edit the website and read messages.</p>
+    <label class="f"><span>Username</span><input type="text" name="username" autocomplete="username" required autofocus></label>
+    <label class="f"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit" style="width:100%">Sign in</button>
+    <p class="msg" data-login-msg aria-live="polite"></p>
+    <button type="button" class="linkish" data-forgot>Forgot your password?</button>
+  </form>
+</section>
+
+<!-- set a new password after a reset email -->
+<section class="login" data-view="recover" hidden>
+  <form class="card" data-recover>
+    <h1>Choose a new password</h1>
+    <p class="sub">At least 8 characters.</p>
+    <label class="f"><span>New password</span><input type="password" name="pw1" autocomplete="new-password" minlength="8" required></label>
+    <label class="f"><span>Repeat it</span><input type="password" name="pw2" autocomplete="new-password" minlength="8" required></label>
+    <button class="btn primary" type="submit" style="width:100%">Save password</button>
+    <p class="msg" data-recover-msg aria-live="polite"></p>
+  </form>
+</section>
+
+<!-- dashboard -->
+<div data-view="dash" hidden>
+  <div class="wrap">
+    <header>
+      <span class="mark">MWP</span><span style="color:var(--muted)">Admin</span>
+      <span class="who" data-who></span>
+      <button class="btn small" data-signout>Sign out</button>
+    </header>
+
+    <h2>Edit the website</h2>
+    <div class="tiles">
+      <a class="tile" href="./?edit"><b>✎ English page</b><span>Open the visual editor</span></a>
+      <a class="tile" href="he.html?edit"><b>✎ עמוד בעברית</b><span>Open the visual editor (Hebrew page)</span></a>
+      <a class="tile" href="./" target="_blank" rel="noopener"><b>View the live site ↗</b><span>See it as visitors do</span></a>
+    </div>
+
+    <div class="inbox-head">
+      <h2>Messages from the contact form</h2>
+      <div class="filters" data-filters>
+        <button class="on" data-f="new">New</button>
+        <button data-f="replied">Replied</button>
+        <button data-f="archived">Archived</button>
+        <button data-f="all">All</button>
+      </div>
+    </div>
+    <div class="msgs" data-msgs></div>
+
+    <h2>Change password</h2>
+    <form class="pw" data-pw>
+      <label class="f"><span>Current password</span><input type="password" name="current" autocomplete="current-password" required></label>
+      <label class="f"><span>New password</span><input type="password" name="pw1" autocomplete="new-password" minlength="8" required></label>
+      <label class="f"><span>Repeat new password</span><input type="password" name="pw2" autocomplete="new-password" minlength="8" required></label>
+      <button class="btn primary" type="submit">Change password</button>
+      <p class="msg" data-pw-msg aria-live="polite"></p>
+    </form>
+
+    <footer>Edit history for each page is under <b>History</b> in the editor.</footer>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script>
+(async () => {
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const cfg = window.MWP_SUPABASE || {};
+  if (!cfg.url || !cfg.key || /YOUR-/.test(cfg.url + cfg.key)) { document.body.innerHTML = '<p style="padding:40px">Add your Supabase URL and key to config.js first.</p>'; return; }
+  const sb = supabase.createClient(cfg.url, cfg.key);
+  const next = new URLSearchParams(location.search).get('next');
+  const show = v => $$('[data-view]').forEach(el => { el.hidden = el.dataset.view !== v; });
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  let me = null, username = '';
+
+  // a link from a password-reset email signs the user in for one purpose: choosing a new password
+  let recovering = /type=recovery/.test(location.hash);
+  sb.auth.onAuthStateChange(ev => { if (ev === 'PASSWORD_RECOVERY') { recovering = true; show('recover'); } });
+
+  const enter = async () => {
+    const {data: {user}} = await sb.auth.getUser();
+    if (!user) { show('login'); return; }
+    const {data: ok} = await sb.rpc('is_admin');
+    if (!ok) { await sb.auth.signOut(); show('login'); $('[data-login-msg]').textContent = 'This account isn’t an admin.'; return; }
+    me = user;
+    if (recovering) { show('recover'); return; }
+    if (next && next.startsWith('/') && !next.startsWith('//')) { location.href = next; return; }
+    $('[data-who]').textContent = 'Signed in as ' + (username || user.email);
+    show('dash'); loadMessages();
+  };
+
+  // ---------- sign in with a username ----------
+  $('[data-login]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, msg = $('[data-login-msg]'), btn = f.querySelector('button[type=submit]');
+    msg.textContent = ''; btn.disabled = true;
+    try {
+      username = f.username.value.trim();
+      const {data: email, error: e1} = await sb.rpc('admin_login_email', {p_username: username});
+      if (e1) throw e1;
+      if (!email) throw new Error('Wrong username or password.');
+      const {error: e2} = await sb.auth.signInWithPassword({email, password: f.password.value});
+      if (e2) throw new Error(/invalid/i.test(e2.message) ? 'Wrong username or password.' : e2.message);
+      f.reset(); await enter();
+    } catch (err) { msg.textContent = err.message || String(err); }
+    finally { btn.disabled = false; }
+  });
+
+  // ---------- forgot password: email a reset link ----------
+  $('[data-forgot]').addEventListener('click', async () => {
+    const msg = $('[data-login-msg]'), u = $('[data-login]').username.value.trim();
+    if (!u) { msg.textContent = 'Type your username first, then click “Forgot your password?”.'; return; }
+    const {data: email} = await sb.rpc('admin_login_email', {p_username: u});
+    if (email) await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin + location.pathname});
+    msg.className = 'msg ok';
+    msg.textContent = 'If that username exists, a reset link is on its way to its email address.';
+  });
+  $('[data-recover]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, msg = $('[data-recover-msg]');
+    if (f.pw1.value !== f.pw2.value) { msg.textContent = 'The two passwords don’t match.'; return; }
+    const {error} = await sb.auth.updateUser({password: f.pw1.value});
+    if (error) { msg.textContent = error.message; return; }
+    recovering = false; history.replaceState(null, '', location.pathname);
+    msg.className = 'msg ok'; msg.textContent = 'Saved. Taking you to the dashboard…';
+    setTimeout(enter, 900);
+  });
+
+  // ---------- change password ----------
+  $('[data-pw]').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, msg = $('[data-pw-msg]'), btn = f.querySelector('button');
+    msg.className = 'msg'; msg.textContent = '';
+    if (f.pw1.value.length < 8) { msg.textContent = 'Use at least 8 characters.'; return; }
+    if (f.pw1.value !== f.pw2.value) { msg.textContent = 'The two new passwords don’t match.'; return; }
+    btn.disabled = true;
+    try {
+      const {error: e1} = await sb.auth.signInWithPassword({email: me.email, password: f.current.value});
+      if (e1) throw new Error('Your current password isn’t right.');
+      const {error: e2} = await sb.auth.updateUser({password: f.pw1.value});
+      if (e2) throw e2;
+      f.reset(); msg.className = 'msg ok'; msg.textContent = 'Password changed. Use the new one next time you sign in.';
+    } catch (err) { msg.textContent = err.message || String(err); }
+    finally { btn.disabled = false; }
+  });
+
+  $('[data-signout]').addEventListener('click', async () => { await sb.auth.signOut(); show('login'); });
+
+  // ---------- inbox ----------
+  let filter = 'new';
+  $$('[data-f]').forEach(b => b.addEventListener('click', () => { filter = b.dataset.f; $$('[data-f]').forEach(x => x.classList.toggle('on', x === b)); loadMessages(); }));
+  const loadMessages = async () => {
+    const box = $('[data-msgs]');
+    box.innerHTML = '<div class="empty">Loading…</div>';
+    let q = sb.from('contact_messages').select('id,created_at,name,email,company,about,message,lang,status').order('created_at', {ascending: false}).limit(200);
+    if (filter !== 'all') q = q.eq('status', filter);
+    const {data, error} = await q;
+    if (error) { box.innerHTML = `<div class="empty">Couldn’t load messages: ${esc(error.message)}</div>`; return; }
+    if (!data.length) { box.innerHTML = `<div class="empty">No ${filter === 'all' ? '' : filter + ' '}messages.</div>`; return; }
+    box.innerHTML = data.map(m => `
+      <article class="m ${m.status === 'new' ? 'new' : ''}" data-id="${m.id}">
+        <div class="m-top"><b>${esc(m.name)}</b><a href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: ' + m.about)}">${esc(m.email)}</a>${m.company ? `<span class="meta">${esc(m.company)}</span>` : ''}
+          <span class="pill">${esc(m.about)}</span><span class="pill ${m.status === 'new' ? 'new' : ''}">${esc(m.status)}</span>
+          <span class="meta" style="margin-left:auto">${new Date(m.created_at).toLocaleString()}${m.lang === 'he' ? ' · Hebrew page' : ''}</span></div>
+        <p>${esc(m.message)}</p>
+        <div class="m-acts">
+          <a class="btn small" href="mailto:${esc(m.email)}?subject=${encodeURIComponent('Re: ' + m.about)}">Reply by email</a>
+          ${m.status !== 'replied' ? '<button class="btn small" data-set="replied">Mark replied</button>' : ''}
+          ${m.status !== 'archived' ? '<button class="btn small" data-set="archived">Archive</button>' : ''}
+          ${m.status !== 'new' ? '<button class="btn small" data-set="new">Mark new</button>' : ''}
+          <button class="btn small" data-del>Delete</button>
+        </div>
+      </article>`).join('');
+  };
+  $('[data-msgs]').addEventListener('click', async e => {
+    const art = e.target.closest('[data-id]'); if (!art) return;
+    const id = +art.dataset.id;
+    if (e.target.matches('[data-set]')) {
+      const {error} = await sb.from('contact_messages').update({status: e.target.dataset.set}).eq('id', id);
+      if (error) alert(error.message); else loadMessages();
+    } else if (e.target.matches('[data-del]')) {
+      if (!confirm('Delete this message for good?')) return;
+      const {error} = await sb.from('contact_messages').delete().eq('id', id);
+      if (error) alert(error.message); else loadMessages();
+    }
+  });
+
+  await enter();
+})();
+</script>
+</body>
+</html>

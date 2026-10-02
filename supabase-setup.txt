@@ -1,10 +1,19 @@
 -- =====================================================================
--- MWP · Matan Wild — Supabase setup for the website contact form
--- Paste this whole file into Supabase → SQL Editor → New query → Run.
--- Safe to run more than once.
+-- MWP · Matan Wild — Supabase setup
+-- Contact form + Admin / Edit Mode (login, published pages, version history, media uploads)
+--
+-- BEFORE running this: create the admin login in Supabase →
+--   Authentication → Users → Add user → Create new user
+--   Email: matan@matanwildphotography.com   Password: Matan123   ✔ Auto Confirm User
+--
+-- Then paste this whole file into Supabase → SQL Editor → New query → Run.
+-- Safe to run more than once (it is fine if you already ran the older contact-form version).
 -- =====================================================================
 
--- 1. The table that stores every message sent from the site
+-- PART A · CONTACT FORM
+-- =====================================================================
+
+-- A1. The table that stores every message sent from the site
 create table if not exists public.contact_messages (
   id          bigint generated always as identity primary key,
   created_at  timestamptz not null default now(),
@@ -22,7 +31,7 @@ create table if not exists public.contact_messages (
 create index if not exists contact_messages_created_at_idx on public.contact_messages (created_at desc);
 create index if not exists contact_messages_email_idx on public.contact_messages (lower(email), created_at desc);
 
--- 2. Security: visitors may ADD a message, but can never read, edit or delete any
+-- A2. Security: visitors may ADD a message, but can never read, edit or delete any
 alter table public.contact_messages enable row level security;
 
 revoke all on public.contact_messages from anon, authenticated;
@@ -37,9 +46,9 @@ create policy "Visitors can send a contact message"
   to anon, authenticated
   with check (status = 'new');
 
--- (No select/update/delete policies: only you, in the Supabase dashboard, can see the messages.)
+-- (Visitors get no read access. Admins read messages in admin.html — see part B.)
 
--- 3. Spam guard: at most 5 messages per email address per hour
+-- A3. Spam guard: at most 5 messages per email address per hour
 create or replace function public.contact_messages_rate_limit()
 returns trigger
 language plpgsql
@@ -66,6 +75,204 @@ create trigger contact_messages_rate_limit
   before insert on public.contact_messages
   for each row execute function public.contact_messages_rate_limit();
 
+
+-- =====================================================================
+-- PART B · ADMINS
+-- =====================================================================
+
+-- B1. Who is an admin: a login (Supabase Auth user) plus the username typed on the login screen
+create table if not exists public.site_admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  username   text not null,
+  created_at timestamptz not null default now()
+);
+create unique index if not exists site_admins_username_idx on public.site_admins (lower(username));
+alter table public.site_admins enable row level security;
+revoke all on public.site_admins from anon, authenticated;
+
+-- B2. is_admin(): true when the signed-in user is in site_admins
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from public.site_admins where user_id = auth.uid());
+$$;
+revoke execute on function public.is_admin() from public;
+grant execute on function public.is_admin() to anon, authenticated;
+
+-- B3. The login screen asks for a username; this turns it into the login email
+create or replace function public.admin_login_email(p_username text)
+returns text
+language sql
+stable
+security definer
+set search_path = public, auth
+as $$
+  select u.email::text
+  from public.site_admins a
+  join auth.users u on u.id = a.user_id
+  where lower(a.username) = lower(btrim(p_username))
+  limit 1;
+$$;
+revoke execute on function public.admin_login_email(text) from public;
+grant execute on function public.admin_login_email(text) to anon, authenticated;
+
+-- B4. Admins can read contact messages and mark them replied / archived
+drop policy if exists "Admins can read contact messages" on public.contact_messages;
+create policy "Admins can read contact messages"
+  on public.contact_messages for select to authenticated
+  using (public.is_admin());
+
+drop policy if exists "Admins can update contact messages" on public.contact_messages;
+create policy "Admins can update contact messages"
+  on public.contact_messages for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "Admins can delete contact messages" on public.contact_messages;
+create policy "Admins can delete contact messages"
+  on public.contact_messages for delete to authenticated
+  using (public.is_admin());
+
+grant select, delete on public.contact_messages to authenticated;
+grant update (status) on public.contact_messages to authenticated;
+
+-- =====================================================================
+-- PART C · PAGES AND VERSION HISTORY (Edit Mode)
+-- =====================================================================
+
+-- C1. Every save is kept here, forever (the version history)
+create table if not exists public.site_versions (
+  id             bigint generated always as identity primary key,
+  page           text not null check (page in ('en', 'he')),
+  html           text not null check (char_length(html) <= 3000000),
+  meta           jsonb not null default '{}'::jsonb,
+  note           text check (note is null or char_length(note) <= 300),
+  restored_from  bigint references public.site_versions (id) on delete set null,
+  created_at     timestamptz not null default now(),
+  created_by     uuid references auth.users (id) on delete set null,
+  author         text
+);
+create index if not exists site_versions_page_idx on public.site_versions (page, created_at desc);
+
+-- C2. What visitors see right now: the latest published version of each page
+create table if not exists public.site_pages (
+  page        text primary key check (page in ('en', 'he')),
+  html        text not null,
+  meta        jsonb not null default '{}'::jsonb,
+  version_id  bigint references public.site_versions (id) on delete set null,
+  updated_at  timestamptz not null default now()
+);
+
+alter table public.site_versions enable row level security;
+alter table public.site_pages    enable row level security;
+
+revoke all on public.site_versions from anon, authenticated;
+revoke all on public.site_pages    from anon, authenticated;
+grant select on public.site_pages    to anon, authenticated;   -- everyone can read the live page
+grant select on public.site_versions to authenticated;         -- only admins (policy below) read history
+
+drop policy if exists "Everyone can read the live pages" on public.site_pages;
+create policy "Everyone can read the live pages"
+  on public.site_pages for select to anon, authenticated using (true);
+
+drop policy if exists "Admins can read version history" on public.site_versions;
+create policy "Admins can read version history"
+  on public.site_versions for select to authenticated using (public.is_admin());
+
+-- C3. publish_page(): the Save button. Stores a new version and makes it live, in one step.
+--     p_base_version guards against two people overwriting each other: if someone else published
+--     since this editor opened, it stops with CONFLICT (the editor then asks before overwriting).
+create or replace function public.publish_page(
+  p_page           text,
+  p_html           text,
+  p_meta           jsonb  default '{}'::jsonb,
+  p_note           text   default null,
+  p_restored_from  bigint default null,
+  p_base_version   bigint default null
+)
+returns bigint
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_id      bigint;
+  v_current bigint;
+  v_author  text;
+begin
+  if not public.is_admin() then
+    raise exception 'Only admins can publish' using errcode = '42501';
+  end if;
+  if p_page not in ('en', 'he') then
+    raise exception 'Unknown page %', p_page;
+  end if;
+
+  select version_id into v_current from public.site_pages where page = p_page for update;
+  if p_base_version is not null and v_current is distinct from p_base_version then
+    raise exception 'CONFLICT' using errcode = 'P0002';
+  end if;
+
+  select username into v_author from public.site_admins where user_id = auth.uid();
+
+  insert into public.site_versions (page, html, meta, note, restored_from, created_by, author)
+  values (p_page, p_html, coalesce(p_meta, '{}'::jsonb), nullif(btrim(p_note), ''), p_restored_from, auth.uid(), v_author)
+  returning id into v_id;
+
+  insert into public.site_pages (page, html, meta, version_id, updated_at)
+  values (p_page, p_html, coalesce(p_meta, '{}'::jsonb), v_id, now())
+  on conflict (page) do update
+    set html = excluded.html, meta = excluded.meta, version_id = excluded.version_id, updated_at = now();
+
+  return v_id;
+end;
+$$;
+revoke execute on function public.publish_page(text, text, jsonb, text, bigint, bigint) from public, anon;
+grant execute on function public.publish_page(text, text, jsonb, text, bigint, bigint) to authenticated;
+
+-- =====================================================================
+-- PART D · MEDIA UPLOADS (photos, videos, icons added in Edit Mode)
+-- =====================================================================
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('site-media', 'site-media', true, 52428800,
+        array['image/jpeg','image/png','image/webp','image/gif','image/svg+xml','image/avif',
+              'video/mp4','video/webm','video/quicktime'])
+on conflict (id) do update
+  set public = true,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Admins can list site media"   on storage.objects;
+drop policy if exists "Admins can upload site media" on storage.objects;
+drop policy if exists "Admins can update site media" on storage.objects;
+drop policy if exists "Admins can delete site media" on storage.objects;
+
+create policy "Admins can list site media" on storage.objects
+  for select to authenticated using (bucket_id = 'site-media' and public.is_admin());
+create policy "Admins can upload site media" on storage.objects
+  for insert to authenticated with check (bucket_id = 'site-media' and public.is_admin());
+create policy "Admins can update site media" on storage.objects
+  for update to authenticated using (bucket_id = 'site-media' and public.is_admin());
+create policy "Admins can delete site media" on storage.objects
+  for delete to authenticated using (bucket_id = 'site-media' and public.is_admin());
+
+-- =====================================================================
+-- PART E · MAKE MATAN AN ADMIN
+-- Uses the login you created under Authentication → Users (see the top of this file).
+-- If you used a different email there, change it on the last line before running.
+-- =====================================================================
+
+insert into public.site_admins (user_id, username)
+select id, 'Matan' from auth.users
+where lower(email) = lower('matan@matanwildphotography.com')
+on conflict (user_id) do update set username = excluded.username;
+
+-- Check: this should return one row with username Matan.
+select a.username, u.email from public.site_admins a join auth.users u on u.id = a.user_id;
+
 -- =====================================================================
 -- Handy queries (run them later in the SQL Editor, not now)
 -- =====================================================================
@@ -75,3 +282,7 @@ create trigger contact_messages_rate_limit
 --
 -- Mark one as replied (change 1 to the message id):
 --   update public.contact_messages set status = 'replied' where id = 1;
+--
+-- Add another admin (create their login under Authentication → Users first):
+--   insert into public.site_admins (user_id, username)
+--   select id, 'Lior' from auth.users where email = 'lior@example.com';

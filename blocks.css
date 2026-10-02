@@ -1,0 +1,69 @@
+/* Shared by index.html and he.html: the live-content loader, the copy icon,
+   and the building blocks that Edit Mode can add to a page. */
+
+/* while the live (edited) content is fetched, the page waits; after 3s it shows regardless */
+.mwp-wait #site{visibility:hidden;animation:mwp-show 0s 3s forwards}
+@keyframes mwp-show{to{visibility:visible}}
+[hidden]{display:none!important}
+
+/* copy the email address: an icon button */
+.mail button.copy-btn{display:inline-grid;place-items:center;width:40px;height:40px;min-height:40px;padding:0;border-radius:50%;letter-spacing:0}
+.copy-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.copy-btn.ok{border-color:var(--goldsoft);color:var(--goldsoft)}
+
+/* anything shown outside an animated section appears straight away */
+.js .fade.in{opacity:1;transform:none}
+
+/* Edit Mode: show/hide per screen size, and grid columns on desktop */
+@media (max-width:760px){html:not(.mwe-editing) [data-hide="mobile"]{display:none!important}}
+@media (min-width:761px){html:not(.mwe-editing) [data-hide="desktop"]{display:none!important}}
+@media (min-width:761px){
+  [data-layout-cols]{display:grid!important}
+  [data-layout-cols="1"]{grid-template-columns:minmax(0,1fr)!important}
+  [data-layout-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  [data-layout-cols="3"]{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  [data-layout-cols="4"]{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  [data-layout-cols="5"]{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  [data-layout-cols="6"]{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+}
+
+/* ---------- building blocks added in Edit Mode ---------- */
+.blk{padding-block:var(--pad-top) var(--pad-bottom)}
+.blk-h3{margin:24px 0 0;font-weight:300;font-size:clamp(26px,3vw,44px);line-height:1.1;letter-spacing:-.02em}
+.blk-h3 b{font-weight:750}
+.blk-text{margin:18px 0 0;max-width:62ch;font-size:16px;line-height:1.7;color:var(--muted)}
+.blk-btn{display:inline-flex;align-items:center;text-decoration:none;margin-top:30px;color:var(--off)}
+.blk-img{margin:clamp(24px,4vh,40px) 0 0}
+.blk-img img,.blk-img video{display:block;width:100%;height:auto;border-radius:2px;background:var(--panel)}
+.blk-img figcaption{margin-top:12px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.blk-ic{display:block;width:44px;height:44px;margin-top:24px;fill:none;stroke:var(--goldsoft);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+img.blk-ic{object-fit:contain}
+.blk-hr{margin:clamp(32px,6vh,64px) 0;border:0;border-top:1px solid var(--rule)}
+.blk-space{height:64px}
+.blk-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:center;margin-top:clamp(32px,6vh,64px)}
+.blk-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,44px);margin-top:clamp(32px,6vh,64px)}
+.blk-cols>div{display:grid;align-content:start;gap:4px}
+.blk-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,28px);margin-top:clamp(36px,6vh,64px)}
+.blk-gallery figure{margin:0}
+.blk-gallery img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2px;background:var(--panel)}
+.blk-video{position:relative;margin:clamp(40px,7vh,96px) 0}
+.blk-video video{display:block;width:100%;max-height:100vh;object-fit:cover;background:var(--panel)}
+@media (max-width:760px){.blk-two,.blk-cols{grid-template-columns:1fr}.blk-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* signed-in admin: the small bar on the live site */
+.mwp-adminbar{position:fixed;z-index:2147483000;inset-inline-start:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;padding:6px;border-radius:999px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.35);font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;direction:ltr}
+.mwp-adminbar a{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;color:#141413;text-decoration:none}
+.mwp-adminbar a:first-child{background:#141413;color:#fff}
+.mwp-adminbar a:hover{opacity:.85}
+.mwp-ribbon{position:fixed;z-index:2147483000;left:50%;top:12px;transform:translateX(-50%);padding:9px 16px;border-radius:999px;background:#F4AF56;color:#141413;font:600 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+
+/* WhatsApp in the offer pop-up: an outline button beside "Start a conversation", same height and lettering */
+.wa-btn{--tr:.2em;display:inline-flex;align-items:center;gap:12px;min-height:50px;padding-inline:22px calc(26px - var(--tr));border-radius:var(--pill);border:1px solid rgba(244,244,244,.3);font-size:12px;font-weight:600;letter-spacing:var(--tr);text-transform:uppercase;text-decoration:none;color:var(--off);transition:border-color .3s,color .3s,background .3s}
+.wa-btn:hover{border-color:var(--goldsoft);color:var(--gold);background:rgba(228,170,124,.06)}
+.wa-btn .wa-ic{flex:none;width:20px;height:20px;overflow:visible}
+.wa-btn .wa-ring{fill:none;stroke:var(--goldsoft);stroke-width:1.4;stroke-linejoin:round}
+.wa-btn .wa-phone{fill:var(--goldsoft)}
+.wa-btn:hover .wa-ring{stroke:var(--gold)}.wa-btn:hover .wa-phone{fill:var(--gold)}
+[dir=rtl] .wa-btn{padding-inline:calc(26px - var(--tr)) 22px}
+@media (max-width:420px){.sheet-cta>*{flex:1 1 100%;justify-content:center}}
+.sheet-cta{column-gap:12px}
