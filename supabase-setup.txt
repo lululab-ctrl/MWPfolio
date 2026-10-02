@@ -1,0 +1,77 @@
+-- =====================================================================
+-- MWP · Matan Wild — Supabase setup for the website contact form
+-- Paste this whole file into Supabase → SQL Editor → New query → Run.
+-- Safe to run more than once.
+-- =====================================================================
+
+-- 1. The table that stores every message sent from the site
+create table if not exists public.contact_messages (
+  id          bigint generated always as identity primary key,
+  created_at  timestamptz not null default now(),
+  name        text not null check (char_length(btrim(name)) between 1 and 200),
+  email       text not null check (char_length(email) <= 320 and email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'),
+  company     text check (company is null or char_length(company) <= 200),
+  about       text not null default 'Something else' check (about in (
+                'Brand partnership', 'Commissioned work', 'Image licensing',
+                'Team expedition', 'Lectures and mentoring', 'Collect', 'Something else')),
+  message     text not null check (char_length(btrim(message)) between 1 and 5000),
+  lang        text not null default 'en' check (lang in ('en', 'he')),
+  status      text not null default 'new' check (status in ('new', 'replied', 'archived'))
+);
+
+create index if not exists contact_messages_created_at_idx on public.contact_messages (created_at desc);
+create index if not exists contact_messages_email_idx on public.contact_messages (lower(email), created_at desc);
+
+-- 2. Security: visitors may ADD a message, but can never read, edit or delete any
+alter table public.contact_messages enable row level security;
+
+revoke all on public.contact_messages from anon, authenticated;
+grant usage on schema public to anon, authenticated;
+grant insert (name, email, company, about, message, lang)
+  on public.contact_messages to anon, authenticated;
+
+drop policy if exists "Visitors can send a contact message" on public.contact_messages;
+create policy "Visitors can send a contact message"
+  on public.contact_messages
+  for insert
+  to anon, authenticated
+  with check (status = 'new');
+
+-- (No select/update/delete policies: only you, in the Supabase dashboard, can see the messages.)
+
+-- 3. Spam guard: at most 5 messages per email address per hour
+create or replace function public.contact_messages_rate_limit()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if (
+    select count(*) from public.contact_messages
+    where lower(email) = lower(new.email)
+      and created_at > now() - interval '1 hour'
+  ) >= 5 then
+    raise exception 'Too many messages from this address. Please try again later.'
+      using errcode = 'P0001';
+  end if;
+  return new;
+end;
+$$;
+
+revoke execute on function public.contact_messages_rate_limit() from public, anon, authenticated;
+
+drop trigger if exists contact_messages_rate_limit on public.contact_messages;
+create trigger contact_messages_rate_limit
+  before insert on public.contact_messages
+  for each row execute function public.contact_messages_rate_limit();
+
+-- =====================================================================
+-- Handy queries (run them later in the SQL Editor, not now)
+-- =====================================================================
+-- New messages, newest first:
+--   select created_at, name, email, company, about, message
+--   from public.contact_messages where status = 'new' order by created_at desc;
+--
+-- Mark one as replied (change 1 to the message id):
+--   update public.contact_messages set status = 'replied' where id = 1;
