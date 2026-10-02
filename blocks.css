@@ -110,4 +110,26 @@ img.blk-ic{object-fit:contain}
   #site .roles-line{gap:8px 18px;letter-spacing:.14em}
   /* the Tell photo's credit moves to the bottom corner, clear of the headline */
   #site .tell .credit{top:auto;bottom:16px;padding-block:0}
+  /* type on phones: about 15% smaller than before, so headlines and text sit more comfortably */
+  #site .say{font-size:34px}
+  #site .word{font-size:52px}
+  #site .open h1{font-size:32px}
+  #site .outro h2{font-size:38px}
+  #site .mag{font-size:34px}
+  #site .proof-head h2{font-size:26px}
+  #site .offers h3{font-size:26px}
+  #site .doors b{font-size:24px}
+  #site .sheet h3{font-size:27px}
+  #site .film .over{font-size:23px}
+  #site .band .over{font-size:20px}
+  #site .big{font-size:72px}
+  #site .fstats .odo,#site .fstats .num{font-size:40px}
+  #site .plats .odo{font-size:25px}
+  #site .roles b{font-size:18px}
+  #site .steps b{font-size:18px}
+  #site .blk-h3{font-size:24px}
+  #site .line,#site .plats-head,#site .sheet-lead{font-size:15.5px}
+  #site .offers p,#site .blk-text,#site .ticks li{font-size:14.5px}
+  #site .steps p{font-size:13.5px}
+  #site .follow{font-size:15px}
 }
