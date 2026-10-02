@@ -47,6 +47,18 @@
     try { return Object.keys(localStorage).some(k => /^sb-.+-auth-token$/.test(k)); } catch (_) { return false; }
   };
 
+  // Phones only: the Field section (#field) comes before Worked with / Featured in (#brands).
+  // The page itself keeps its desktop order; this only swaps the two on screens 760px and narrower.
+  const phone = matchMedia('(max-width: 760px)');
+  let swapped = false;
+  const phoneOrder = () => {
+    const b = document.getElementById('brands'), f = document.getElementById('field');
+    if (!b || !f) return;
+    if (phone.matches && !swapped && b.nextElementSibling === f) { b.before(f); swapped = true; }
+    else if (!phone.matches && swapped && f.nextElementSibling === b) { b.after(f); swapped = false; }
+  };
+  addEventListener('resize', phoneOrder); // runs before the site's own re-measure
+
   const boot = () => {
     try { if (window.MWP_BOOT) window.MWP_BOOT(); }
     catch (e) { console.error('The site script stopped:', e); html.classList.remove('js'); } // show everything, unanimated
@@ -70,6 +82,7 @@
     if (!live) live = await fetchLive();
     if (live && live.html) { root.innerHTML = live.html; applyMeta(live.meta); }
     html.classList.remove('mwp-wait');
+    phoneOrder();
     boot();
 
     if (preview) {
