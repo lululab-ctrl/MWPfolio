@@ -65,7 +65,19 @@ button,input,select,textarea{font:inherit;color:inherit}
 .talk:hover{background:rgba(255,255,255,.12);border-color:#fff}
 .lang{min-height:38px;display:inline-flex;align-items:center;font-size:13px;font-weight:600;text-decoration:none;color:#fff;transition:opacity .6s}
 .lang:hover{text-decoration:underline;text-underline-offset:4px}
-.js .mark:not(.on),.js .talk:not(.on),.js .lang:not(.on){opacity:0}
+.js .mark:not(.on),.js .talk:not(.on),.js .lang:not(.on),.js .scrim:not(.on){opacity:0}
+/* a soft fade behind the top bar, so words and photos slip under MWP, the language link and the button instead of crossing them;
+   on the dark page it is invisible, over a photo it only deepens the top edge */
+.scrim{position:fixed;z-index:39;inset:0 0 auto;height:calc(84px + env(safe-area-inset-top,0px));pointer-events:none;background:linear-gradient(180deg,rgba(10,9,8,.86) 0%,rgba(10,9,8,.55) 52%,rgba(10,9,8,0) 100%);transition:opacity .6s}
+@media (max-width:760px){.scrim{display:none}} /* phones have their own fade, in blocks.css */
+/* touch tablets: the small links keep their look but get a finger-sized invisible hit area around them,
+   and the smallest labels step up from 10px to 11px (phones are handled in blocks.css) */
+@media (pointer:coarse) and (min-width:761px){
+  .lang,.talk,.follow a,.go,.foot a,.legal button{position:relative}
+  :is(.mark,.lang,.talk,.follow a,.go,.foot a,.legal button)::before{content:"";position:absolute;inset:-9px -6px}
+  .mq-toggle,.film-toggle,.quick button{min-height:40px}
+  .field-in label,.mq-toggle,.film-toggle{font-size:11px}
+}
 .mark:focus-visible,.talk:focus-visible,.lang:focus-visible{opacity:1!important}
 
 /* ---------- shared motion (hidden states only apply when the script runs) ---------- */
@@ -228,18 +240,18 @@ p{text-wrap:pretty}
 .band::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,9,8,.5) 0%,rgba(10,9,8,0) 38%,rgba(10,9,8,0) 72%,rgba(10,9,8,.55) 100%)}
 /* bottom captions share one line: same offset, same height as the film button, trailing tracking pulled back.
    Every photograph on the page carries one: its name, place and the month it was taken, so it reads as a real moment, not stock */
-.band figcaption,.film-cap,.vis,.credit{--tr:.18em;position:absolute;z-index:1;inset-inline-end:var(--edge);bottom:clamp(16px,2.6vw,30px);padding-block:calc((34px - 1.4em) / 2);margin-block:0;margin-inline-end:calc(-1 * var(--tr));font-size:11px;line-height:1.4;letter-spacing:var(--tr);text-transform:uppercase;color:rgba(244,244,244,.72);text-shadow:0 0 12px rgba(10,9,8,.8),0 1px 2px rgba(10,9,8,.55)}
+.band figcaption,.film-cap,.vis,.credit{--tr:.18em;position:absolute;z-index:1;inset-inline-end:var(--edge);bottom:clamp(16px,2.6vw,30px);padding-block:calc((34px - 1.4em) / 2);margin-block:0;margin-inline-end:calc(-1 * var(--tr));max-width:calc(100% - 2 * var(--edge));text-align:end;font-size:11px;line-height:1.4;letter-spacing:var(--tr);text-transform:uppercase;color:rgba(244,244,244,.72);text-shadow:0 0 12px rgba(10,9,8,.8),0 1px 2px rgba(10,9,8,.55)}
 .when::before,.vis .tail::before{content:" · "}
+.when{white-space:nowrap} /* a wrapped credit never splits its month from its year */
 .stage .credit{z-index:2}
 .js .stage .credit{opacity:0}
 /* desktop: the puma's credit shares the baseline of the roles line beside it */
 @media (min-width:761px){.stage .credit{bottom:calc(clamp(40px,9vh,110px) + 11px);padding-block:0}}
 /* the Tell photo is credited on the section's opening line, level with "04 Tell", where the photo still shows */
 .tell .credit{top:calc(var(--pad-top) + 18px);bottom:auto;padding-block:0}
-@media (max-width:760px){.tell .credit{top:calc(var(--pad-top) - 6px)}}
 .sheet-img::after{content:"";position:absolute;inset:auto 0 0;height:96px;background:linear-gradient(180deg,rgba(10,9,8,0),rgba(10,9,8,.5));pointer-events:none}
-.sheet-img .credit{z-index:2;inset-inline-end:18px;bottom:12px}
-.end .credit{position:static;margin-top:16px;text-align:end;color:var(--faint);text-shadow:none}
+.sheet-img .credit{z-index:2;inset-inline-end:18px;bottom:12px;max-width:calc(100% - 36px)}
+.end .credit{position:static;max-width:none;margin-top:16px;text-align:end;color:var(--faint);text-shadow:none}
 .band .over{position:absolute;z-index:1;inset-inline-start:var(--edge);top:clamp(20px,5vw,72px);margin:0;max-width:20ch;font-weight:250;font-size:clamp(22px,3.6vw,60px);line-height:1.05;letter-spacing:-.03em}
 .band .over b{font-weight:750}
 /* film: behind the scenes on expedition, full width at its own 16:9 */
@@ -254,7 +266,7 @@ p{text-wrap:pretty}
 .film-toggle{--tr:.24em;position:absolute;z-index:1;inset-inline-start:var(--edge);bottom:clamp(16px,2.6vw,30px);min-height:34px;padding-inline:calc(14px + var(--tr)) 14px;border-radius:var(--pill);border:1px solid rgba(244,244,244,.35);background:rgba(10,9,8,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:10px;font-weight:600;letter-spacing:var(--tr);text-transform:uppercase;color:var(--off);cursor:pointer}
 .film-toggle:hover{border-color:rgba(244,244,244,.7)}
 /* phones: the film caption rises above the Play button instead of sharing its line */
-@media (max-width:760px){.film{aspect-ratio:auto;height:min(78svh,620px)}.film-cap{bottom:calc(clamp(16px,2.6vw,30px) + 38px)}}
+@media (max-width:760px){.film{aspect-ratio:auto;height:min(78svh,620px)}.film-cap{bottom:calc(clamp(16px,2.6vw,30px) + 46px)}}
 /* phones: a 2.5:1 band would be a sliver, so it gets tall and the whole panorama pans past as you scroll */
 @media (max-width:760px){
   .band{aspect-ratio:auto;height:min(62svh,540px)}
@@ -538,6 +550,7 @@ html:has(.doc[open]){overflow:hidden}
 </style>
 </head>
 <body>
+<div class="scrim" aria-hidden="true"></div>
 <div id="site">
 <a class="skip" href="#reach">דילוג ליצירת קשר</a>
 <a class="mark" href="#top" aria-label="MWP, חזרה להתחלה">MWP</a>
@@ -1054,7 +1067,7 @@ window.MWP_BOOT = () => {
 
   // ---------- first page: MWP cut out of black, then fly through it ----------
   const intro = $('[data-intro]'), stage = $('.stage', intro), cv = $('[data-cut]'), ctx = cv.getContext('2d');
-  const photo = $('[data-photo]'), open = $('[data-open]'), openCredit = $('[data-open-credit]'), cue = $('[data-cue]'), mark = $('.mark'), talk = $('.talk'), lang = $('.lang');
+  const photo = $('[data-photo]'), open = $('[data-open]'), openCredit = $('[data-open-credit]'), cue = $('[data-cue]'), mark = $('.mark'), talk = $('.talk'), lang = $('.lang'), scrim = $('.scrim');
   let W = 0, H = 0, dpr = 1, fs = 0, ox = 0, oy = 0, tx0 = 0, ty0 = 0;
   const FONT = s => `800 ${s}px "Google Sans Flex", "Google Sans", "Helvetica Neue", Arial, sans-serif`;
   const setType = c => { c.font = FONT(fs); c.textAlign = 'center'; c.textBaseline = 'alphabetic'; if ('letterSpacing' in c) c.letterSpacing = (fs * .03) + 'px'; };
@@ -1097,7 +1110,7 @@ window.MWP_BOOT = () => {
   const frame = () => {
     const r = intro.getBoundingClientRect(), p = still ? 1 : clamp(-r.top / (r.height - innerHeight));
     const past = p > .9 || r.bottom < innerHeight * .5;
-    mark.classList.toggle('on', past); talk.classList.toggle('on', past); lang.classList.toggle('on', past);
+    mark.classList.toggle('on', past); talk.classList.toggle('on', past); lang.classList.toggle('on', past); scrim.classList.toggle('on', past);
     // once the first page has scrolled away, stop repainting it
     if (r.bottom < 0) { if (gone) return; gone = true; } else gone = false;
     drawCut(Math.pow(120, smooth(.04, .66, p)), 1 - smooth(.46, .7, p));

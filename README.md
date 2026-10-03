@@ -21,7 +21,7 @@ supabase-setup.txt  the SQL to run once in Supabase
 
 1. **Create the admin login.** Supabase → **Authentication → Users → Add user → Create new user**
    - Email: `matan@matanwildphotography.com`
-   - Password: `Matan123`
+   - Password: a strong one of your own. Never write it in this file; this repository is public.
    - Tick **Auto Confirm User** → Create.
 2. **Run the SQL.** **SQL Editor → New query**, paste everything from `supabase-setup.txt`, **Run**.
    The last result should show one row: `Matan | matan@matanwildphotography.com`.
@@ -44,8 +44,8 @@ GitHub → **Settings → Pages** → Branch `main`, folder `/ (root)` → Save.
 
 ## 3. Using Edit Mode
 
-1. Go to `…/admin.html` and sign in: **Matan** / **Matan123**.
-2. **Change the password straight away** (Change password, on the same page).
+1. Go to `…/admin.html` and sign in with your admin email and password.
+2. If the account was ever set up with a simple starter password, change it straight away (Change password, on the same page).
 3. Click **English page** or **עמוד בעברית** to open the editor. When you're signed in, the live site also
    shows a small **✎ Edit this page** button in the corner (only on your browser).
 
