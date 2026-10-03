@@ -76,9 +76,24 @@ Each language is edited separately.
   design (from these files) instead of your edits, and the contact form and admin don't work.
   Open the Supabase dashboard and click **Restore project** to bring everything back, or use a paid plan to avoid pauses.
 - Uploads are limited to **50 MB** per file (Supabase free plan). Compress long videos first.
-- New messages from the contact form appear in `admin.html` (no email alert).
+- New messages from the contact form appear in `admin.html`, and are emailed to matan@matanwildphotography.com
+  once the email alert is set up (see below).
 - Add another admin: create their login in Authentication → Users, then run the "Add another admin" query
   at the bottom of `supabase-setup.txt`.
+
+## Email alert for new messages
+
+`supabase-email-alerts.txt` makes Supabase email every new contact-form message to
+**matan@matanwildphotography.com** (Reply-To is the visitor, so Reply answers them). It sends through
+**Resend** (resend.com, free up to 100 emails a day) from `contact@mw.photography`.
+
+1. Resend: sign up, **Domains → Add domain → `mw.photography`**, add the DNS records it shows in GoDaddy
+   (they sit on `send.` and `resend._domainkey.`, so the website is not affected), wait for **Verified**.
+2. Resend: **API Keys → Create API key** (Sending access).
+3. Supabase SQL Editor: run STEP 1 of the file with the key, then STEP 2.
+4. Test with the insert at the bottom of the file; check `net._http_response` if no email arrives.
+
+To change the recipient or sender, edit `contact_alert_settings()` in the file and run STEP 2 again.
 
 ## Custom domain (matanwildphotography.com) – optional
 

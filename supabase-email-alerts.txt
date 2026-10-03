@@ -1,0 +1,141 @@
+-- =====================================================================
+-- MWP · Email alert for every new contact-form message
+-- Sends each new message to matan@matanwildphotography.com the moment it is saved.
+-- The visitor's address is set as Reply-To, so pressing Reply answers them directly.
+--
+-- Uses Resend (resend.com) to deliver the email. Before running this:
+--   1. Have a Resend account with the domain mw.photography verified.
+--   2. Run STEP 1 below once, with your Resend API key pasted in.
+--   3. Then run STEP 2 (everything from "STEP 2" to the end).
+-- Safe to run STEP 2 again later; it replaces itself.
+-- =====================================================================
+
+
+-- =====================================================================
+-- STEP 1 · Store the Resend API key in Supabase Vault (run ONCE, on its own)
+-- Paste your key between the quotes (it starts with re_), select just these
+-- lines, and press Run. The key is stored encrypted and never appears on the website.
+-- =====================================================================
+
+-- select vault.create_secret('re_PASTE_YOUR_KEY_HERE', 'resend_api_key', 'Resend key for MWP contact alerts');
+
+-- (Remove the two dashes at the start of the line above before running it.)
+-- To replace the key later:
+--   select vault.update_secret((select id from vault.secrets where name = 'resend_api_key'), 're_NEW_KEY');
+
+
+-- =====================================================================
+-- STEP 2 · The alert itself (run everything below)
+-- =====================================================================
+
+-- pg_net lets the database send web requests (here: to Resend)
+create extension if not exists pg_net with schema extensions;
+
+-- Who gets the alert and who it appears to come from (change here if needed)
+create or replace function public.contact_alert_settings()
+returns table (send_to text, send_from text)
+language sql
+immutable
+as $$
+  select 'matan@matanwildphotography.com'::text,
+         'MWP website <contact@mw.photography>'::text;
+$$;
+revoke execute on function public.contact_alert_settings() from public, anon, authenticated;
+
+-- Makes visitor text safe to put inside an HTML email
+create or replace function public.contact_alert_html(t text)
+returns text
+language sql
+immutable
+as $$
+  select replace(replace(replace(replace(coalesce(t, ''), '&', '&amp;'), '<', '&lt;'), '>', '&gt;'), '"', '&quot;');
+$$;
+revoke execute on function public.contact_alert_html(text) from public, anon, authenticated;
+
+-- Runs after each new message is saved and hands the email to Resend
+create or replace function public.contact_messages_email_alert()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, extensions
+as $$
+declare
+  v_key   text;
+  v_to    text;
+  v_from  text;
+  v_page  text := case when new.lang = 'he' then 'Hebrew page' else 'English page' end;
+  v_html  text;
+  v_text  text;
+begin
+  select decrypted_secret into v_key from vault.decrypted_secrets where name = 'resend_api_key' limit 1;
+  if v_key is null or v_key = '' then
+    raise warning 'Contact alert skipped: no resend_api_key in Vault';
+    return new;
+  end if;
+
+  select send_to, send_from into v_to, v_from from public.contact_alert_settings();
+
+  v_html :=
+    '<div style="font-family:-apple-system,Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.55;color:#141413">'
+    || '<p style="margin:0 0 16px;font-size:13px;color:#7a7a80">New message from mw.photography · ' || v_page || '</p>'
+    || '<table style="border-collapse:collapse;margin:0 0 18px">'
+    || '<tr><td style="padding:3px 16px 3px 0;color:#7a7a80">Name</td><td style="padding:3px 0"><b>' || public.contact_alert_html(new.name) || '</b></td></tr>'
+    || '<tr><td style="padding:3px 16px 3px 0;color:#7a7a80">Email</td><td style="padding:3px 0"><a href="mailto:' || public.contact_alert_html(new.email) || '">' || public.contact_alert_html(new.email) || '</a></td></tr>'
+    || case when coalesce(new.company, '') <> '' then
+         '<tr><td style="padding:3px 16px 3px 0;color:#7a7a80">Company</td><td style="padding:3px 0">' || public.contact_alert_html(new.company) || '</td></tr>'
+       else '' end
+    || '<tr><td style="padding:3px 16px 3px 0;color:#7a7a80">About</td><td style="padding:3px 0">' || public.contact_alert_html(new.about) || '</td></tr>'
+    || '</table>'
+    || '<div style="white-space:pre-wrap;padding:14px 16px;background:#f4f4f6;border-radius:8px">' || public.contact_alert_html(new.message) || '</div>'
+    || '<p style="margin:18px 0 0;font-size:13px;color:#7a7a80">Press Reply to answer ' || public.contact_alert_html(new.name) || ' directly. All messages are also in mw.photography/admin.html</p>'
+    || '</div>';
+
+  v_text :=
+    'New message from mw.photography (' || v_page || ')' || E'\n\n'
+    || 'Name: ' || new.name || E'\n'
+    || 'Email: ' || new.email || E'\n'
+    || case when coalesce(new.company, '') <> '' then 'Company: ' || new.company || E'\n' else '' end
+    || 'About: ' || new.about || E'\n\n'
+    || new.message || E'\n\n'
+    || 'Reply to this email to answer ' || new.name || ' directly.';
+
+  perform net.http_post(
+    url     := 'https://api.resend.com/emails',
+    headers := jsonb_build_object('Authorization', 'Bearer ' || v_key, 'Content-Type', 'application/json'),
+    body    := jsonb_build_object(
+      'from',     v_from,
+      'to',       jsonb_build_array(v_to),
+      'reply_to', new.email,
+      'subject',  'New message · ' || new.about || ' · ' || new.name,
+      'html',     v_html,
+      'text',     v_text
+    )
+  );
+  return new;
+exception when others then
+  -- an email problem must never stop the message from being saved
+  raise warning 'Contact alert failed: %', sqlerrm;
+  return new;
+end;
+$$;
+revoke execute on function public.contact_messages_email_alert() from public, anon, authenticated;
+
+drop trigger if exists contact_messages_email_alert on public.contact_messages;
+create trigger contact_messages_email_alert
+  after insert on public.contact_messages
+  for each row execute function public.contact_messages_email_alert();
+
+
+-- =====================================================================
+-- Handy checks (run later, one at a time)
+-- =====================================================================
+-- Send a test (it also appears in admin.html; delete it there afterwards):
+--   insert into public.contact_messages (name, email, about, message)
+--   values ('Test', 'matan@matanwildphotography.com', 'Something else', 'Testing the email alert.');
+--
+-- See what Resend answered for the last alerts (200 = sent; anything else shows the reason):
+--   select id, status_code, content, error_msg, created from net._http_response order by id desc limit 5;
+--
+-- Turn the alert off / on:
+--   alter table public.contact_messages disable trigger contact_messages_email_alert;
+--   alter table public.contact_messages enable  trigger contact_messages_email_alert;
