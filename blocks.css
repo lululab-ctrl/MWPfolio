@@ -88,8 +88,8 @@ img.blk-ic{object-fit:contain}
 
 /* ---------- phones ---------- */
 @media (max-width:760px){
-  /* the top bar gets a soft dark backdrop once it appears, so it never sits on top of text */
-  #site::before{content:"";position:fixed;z-index:39;inset:0 0 auto;height:calc(78px + env(safe-area-inset-top,0px));background:linear-gradient(180deg,rgba(10,9,8,.94) 0%,rgba(10,9,8,.72) 55%,rgba(10,9,8,0) 100%);pointer-events:none;opacity:0;transition:opacity .6s}
+  /* the top bar gets a dark backdrop once it appears (solid behind the bar, then a soft fade), so it never sits on top of text */
+  #site::before{content:"";position:fixed;z-index:39;inset:0 0 auto;height:calc(88px + env(safe-area-inset-top,0px));background:linear-gradient(180deg,var(--night) 0%,var(--night) 60%,rgba(10,9,8,0) 100%);pointer-events:none;opacity:0;transition:opacity .6s}
   #site:has(.mark.on)::before{opacity:1}
   #site .mark,#site .corner{mix-blend-mode:normal}
   #site .corner{gap:10px}
@@ -130,4 +130,67 @@ img.blk-ic{object-fit:contain}
   #site .offers p,#site .blk-text,#site .ticks li{font-size:14.5px}
   #site .steps p{font-size:13.5px}
   #site .follow{font-size:15px}
+}
+
+/* ---------- phones: everything centred (Matan, 3.10.2026) ----------
+   Headings, text, numbers, lists, buttons and photo captions sit on the centre line.
+   The legal reading panel keeps its reading edge: long legal text is hard to read centred. */
+@media (max-width:760px){
+  #site{text-align:center}
+  #site .doc{text-align:start}
+  /* blocks with a reading width sit in the middle of the column */
+  #site .say,#site .line,#site .plats-head,#site .legal p,#site .blk-text,#site .fstats .lbl{margin-inline:auto}
+  #site .blk-ic{margin-inline:auto}
+  #site .mag{text-align:center} /* he.html sets the English magazine name to the right */
+  /* first page */
+  #site .open{inset-inline:var(--gutter);max-width:none}
+  #site .roles-line{justify-content:center}
+  /* photo captions: centred under the picture */
+  #site .band figcaption,#site .film-cap,#site .vis,#site .credit{inset-inline:var(--gutter);margin-inline:0;max-width:none;text-align:center}
+  #site .end .credit{text-align:center}
+  #site .band .over{inset-inline:var(--gutter);max-width:none}
+  #site .film .over{margin-inline:auto}
+  #site .film-toggle{inset-inline:auto;left:50%;transform:translateX(-50%)}
+  #site .cap{flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  #site .cap .when{display:block}
+  #site .cap .when::before{content:none}
+  /* partner: number, title, text and the + button, stacked */
+  #site .offers a{grid-template-columns:minmax(0,1fr);justify-items:center;gap:10px}
+  #site .offers p,#site .offers em{grid-column:auto;grid-row:auto}
+  #site .offers a:hover,#site .offers a:focus-visible{padding-inline-start:0}
+  /* brands and press */
+  #site .proof-head,#site .press-head{justify-content:center}
+  #site .press-head{flex-wrap:wrap;gap:12px 18px}
+  /* field: numbers and steps centred in their cells */
+  #site .fstats li,#site .steps li{justify-items:center;padding-inline:10px}
+  #site .plats .odo,#site .fstats .odo,#site .fstats .num{justify-self:center}
+  /* tell: roles, the big number, channels and the follow row */
+  #site .roles li{justify-items:center;padding-inline:0!important}
+  #site .hero-num{justify-items:center}
+  #site .plats li{justify-items:center;padding-inline:8px}
+  #site .follow{justify-content:center}
+  /* contact: options, lines, form */
+  #site .doors button{grid-template-columns:minmax(0,1fr);justify-items:center;gap:8px;text-align:center}
+  #site .doors span{grid-column:auto;grid-row:auto}
+  #site .doors .ic{order:-1;align-self:auto}
+  #site .doors button:hover,#site .doors button[aria-pressed="true"]{padding-inline-start:0}
+  #site .lines{justify-items:center}
+  #site .lines li,#site .mail,#site .quick{justify-content:center}
+  #site .quick button{text-align:center}
+  #site .field-in input,#site .field-in select,#site .field-in textarea{text-align:center;text-align-last:center}
+  #site .send,#site .wa{justify-self:center}
+  /* footer */
+  #site .foot,#site .legal{flex-direction:column;align-items:center;justify-content:center}
+  #site .foot nav,#site .legal nav{justify-content:center}
+  /* offer pop-up */
+  #site .ticks li{padding-inline:0}
+  #site .ticks li::before{position:static;display:block;margin:0 auto 10px}
+  #site .reach-grid li{justify-items:center}
+  #site .sheet-cta{justify-content:center}
+  /* photo viewer */
+  #site .lb-info{grid-template-columns:minmax(0,1fr);justify-items:center}
+  #site .lb-title,#site .lb-cam{justify-content:center}
+  #site .lb-cam{grid-row:auto}
+  /* blocks added in Edit Mode */
+  #site .blk-cols>div{justify-items:center}
 }
