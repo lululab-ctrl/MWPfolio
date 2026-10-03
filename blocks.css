@@ -108,8 +108,6 @@ img.blk-ic{object-fit:contain}
   /* section openings breathe a little less on a small screen */
   #site .partner,#site .cols,#site .outro,#site .tell,#site .blk{padding-block:clamp(72px,11vh,110px) clamp(56px,8vh,90px)}
   #site .roles-line{gap:8px 18px;letter-spacing:.14em}
-  /* the Tell photo's credit moves to the bottom corner, clear of the headline */
-  #site .tell .credit{top:auto;bottom:16px;padding-block:0}
   /* type on phones: about 15% smaller than before, so headlines and text sit more comfortably */
   #site .say{font-size:34px}
   #site .word{font-size:52px}
