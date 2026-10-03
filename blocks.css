@@ -194,3 +194,7 @@ img.blk-ic{object-fit:contain}
   /* blocks added in Edit Mode */
   #site .blk-cols>div{justify-items:center}
 }
+
+/* Phones and tablets: no "+" badge on every photo (it showed permanently there, since touch screens have no hover).
+   Tapping a photo still opens it full size; computers keep the "+" on hover. */
+@media (hover:none){#site button.frame::after{display:none}}
