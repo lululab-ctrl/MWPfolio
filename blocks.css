@@ -201,3 +201,7 @@ img.blk-ic{object-fit:contain}
 /* Phones: in Create (05), the words sit at the top of the photo instead of the bottom, so they don't cover the elephant.
    The photo itself is unchanged. */
 @media (max-width:760px){#site .create{align-items:start}#site .create .wrap{padding-top:84px}#site .create img{object-position:51.1% 40%}}
+
+/* Desktop: the Create (05) photo moves a little away from the text (right in English, left in Hebrew), so the headline ends before the elephant.
+   Same photo, same size; its left edge fades into the dark background, so no seam shows. */
+@media (min-width:761px){#site .create img{transform:translateX(calc(13vw + max(0px, (100vw - 1440px) * .16)));-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14vw);mask-image:linear-gradient(90deg,transparent 0,#000 14vw)}[dir=rtl] #site .create img{transform:translateX(calc(-13vw - max(0px, (100vw - 1440px) * .16)));-webkit-mask-image:linear-gradient(270deg,transparent 0,#000 14vw);mask-image:linear-gradient(270deg,transparent 0,#000 14vw)}}
