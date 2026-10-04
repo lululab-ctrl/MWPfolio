@@ -198,10 +198,6 @@ img.blk-ic{object-fit:contain}
 /* No "+" badge on the photos, on any screen. Clicking or tapping a photo still opens it full size. */
 #site button.frame::after{display:none}
 
-/* Phones: in Create (05), the words sit above the photo instead of on it, so the elephant print stays in full view */
-@media (max-width:760px){
-  #site .create{display:flex;flex-direction:column;min-height:0;align-items:stretch}
-  #site .create::before{display:none}
-  #site .create .wrap{order:1;padding-block:clamp(72px,11vh,110px) 28px}
-  #site .create img{order:2;position:relative;inset:auto;z-index:0;height:auto;aspect-ratio:4/5;object-position:51% 50%}
-}
+/* Phones: in Create (05), the words sit at the top of the photo instead of the bottom, so they don't cover the elephant.
+   The photo itself is unchanged. */
+@media (max-width:760px){#site .create{align-items:start}}
