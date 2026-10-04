@@ -200,4 +200,4 @@ img.blk-ic{object-fit:contain}
 
 /* Phones: in Create (05), the words sit at the top of the photo instead of the bottom, so they don't cover the elephant.
    The photo itself is unchanged. */
-@media (max-width:760px){#site .create{align-items:start}#site .create .wrap{padding-top:84px}}
+@media (max-width:760px){#site .create{align-items:start}#site .create .wrap{padding-top:84px}#site .create img{object-position:51.1% 40%}}
